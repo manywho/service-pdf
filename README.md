@@ -19,6 +19,12 @@ If you prefer is a properties file you can do the same but with the file service
 
 You will need to create these variables s3.bucketName, s3.awsAccessKeyId and s3.awsSecretAccessKey 
 
+
+#### Using maven for configure the deployment
+
+mvn resources:resources -DbucketName=aaa -DawsAccessKeyId=bbb -DawsSecretAccessKey=ccc
+mvn package
+
 ### Commands
 
 
