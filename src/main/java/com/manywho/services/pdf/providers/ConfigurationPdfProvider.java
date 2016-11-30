@@ -2,6 +2,7 @@ package com.manywho.services.pdf.providers;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.cfg4j.provider.ConfigurationProviderBuilder;
 import org.cfg4j.source.ConfigurationSource;
+import org.cfg4j.source.classpath.ClasspathConfigurationSource;
 import org.cfg4j.source.compose.MergeConfigurationSource;
 import org.cfg4j.source.context.environment.DefaultEnvironment;
 import org.cfg4j.source.context.environment.Environment;
@@ -22,22 +23,17 @@ public class ConfigurationPdfProvider {
         ConfigFilesProvider configFilesProvider = createConfigFilesProvider(
                 new ArrayList<>(Arrays.asList("service.properties.yaml", "service.properties")));
 
-        EnvironmentVariablesConfigurationSource environmentVariablesConfigurationSource = new EnvironmentVariablesConfigurationSource();
         ConfigurationSource source;
-        Environment environment;
 
         if (configFilesProvider != null) {
-            source= new MergeConfigurationSource(new FilesConfigurationSource(configFilesProvider), environmentVariablesConfigurationSource);
-            environment = new ImmutableEnvironment("src/main/resources");
+            source= new MergeConfigurationSource(new ClasspathConfigurationSource(configFilesProvider), new EnvironmentVariablesConfigurationSource());
         } else {
-            source = environmentVariablesConfigurationSource;
-            environment = new DefaultEnvironment();
+            source = new EnvironmentVariablesConfigurationSource();
         }
 
-        // Create provider
         return new ConfigurationProviderBuilder()
                 .withConfigurationSource(source)
-                .withEnvironment(environment)
+                .withEnvironment( new DefaultEnvironment())
                 .build();
     }
 
