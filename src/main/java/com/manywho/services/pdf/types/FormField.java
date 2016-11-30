@@ -11,22 +11,14 @@ public class FormField implements Type {
     @Type.Property(name = "Field Name", contentType = ContentType.String)
     private String fieldName;
 
-    @Type.Property(name = "Is Boolean?", contentType = ContentType.Boolean)
-    private boolean isBoolean;
-
     @Type.Property(name = "Field Value", contentType = ContentType.String)
     private String fieldValue;
 
     public FormField() {}
 
-    public FormField(Boolean isBoolean, String fieldName, String fieldValue) {
-        this.isBoolean = isBoolean;
+    public FormField(String fieldName, String fieldValue) {
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
-    }
-
-    public boolean getBoolean() {
-        return isBoolean;
     }
 
     public String getFieldName() {
