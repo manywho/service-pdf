@@ -1,16 +1,14 @@
 package com.manywho.services.pdf.services;
 
-import com.google.common.base.Strings;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import com.manywho.services.pdf.types.FormField;
+import com.manywho.services.pdf.utilities.FieldMapperUtility;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import java.io.*;
 import java.util.List;
-import java.util.Objects;
 
 public class PdfGeneratorService {
 
@@ -41,49 +39,12 @@ public class PdfGeneratorService {
         AcroFields form = stamper.getAcroFields();
 
         for (FormField field: fields) {
-            populateForm(form, field);
+            FieldMapperUtility.populateForm(form, field);
         }
 
         stamper.close();
         reader.close();
 
         return new ByteArrayInputStream(populatePDF.toByteArray());
-    }
-
-    private void populateForm(AcroFields form, FormField field) throws IOException, DocumentException {
-        switch (form.getFieldType(field.getFieldName())){
-            case AcroFields.FIELD_TYPE_TEXT:
-            case AcroFields.FIELD_TYPE_LIST:
-            case AcroFields.FIELD_TYPE_COMBO:
-                if ( !Strings.isNullOrEmpty(field.getFieldValue()) ) {
-                    form.setField(field.getFieldName(), field.getFieldValue());
-                }
-                break;
-            case AcroFields.FIELD_TYPE_CHECKBOX:
-            case AcroFields.FIELD_TYPE_RADIOBUTTON:
-                String[] status = form.getAppearanceStates(field.getFieldName());
-                form.setField(field.getFieldName(), guessStatus(field.getFieldValue(), status));
-                break;
-            case AcroFields.FIELD_TYPE_NONE:
-            case AcroFields.FIELD_TYPE_PUSHBUTTON:
-            case AcroFields.FIELD_TYPE_SIGNATURE:
-        }
-    }
-
-    private String guessStatus(String value, String status[]) {
-
-        if (Strings.isNullOrEmpty(value)
-                || Objects.equals(value.toLowerCase(), "false")
-                || Objects.equals(value.toLowerCase(), "off")
-                || Objects.equals(value.toLowerCase(), "no")) {
-
-            if (status.length> 1) {
-                return status[1];
-            } else {
-                return "Off";
-            }
-        } else {
-            return status[0];
-        }
     }
 }
