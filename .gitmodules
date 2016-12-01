@@ -1,0 +1,3 @@
+[submodule "service-pdf-examples"]
+	path = service-pdf-examples
+	url = git@github.com:manywho/service-pdf-examples.git
