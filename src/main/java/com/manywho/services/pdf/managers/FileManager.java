@@ -7,12 +7,22 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.BadPdfFormatException;
+import com.lowagie.text.pdf.PdfCopy;
+import com.lowagie.text.pdf.PdfImportedPage;
+import com.lowagie.text.pdf.PdfReader;
 import com.manywho.sdk.services.types.system.$File;
 import com.manywho.services.pdf.configuration.S3Configuration;
 import com.manywho.services.pdf.providers.ConfigurationPdfProvider;
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class FileManager {
@@ -50,5 +60,33 @@ public class FileManager {
 
     private String getFileUrl(String fileId) {
         return s3client.generatePresignedUrl(this.s3Config.bucketName(), fileId, new Date(System.currentTimeMillis() + MAX_TIME_LINK_AVAILABLE)).toString();
+    }
+
+    public $File concatenatePdf(List<$File> files) throws Exception {
+        ByteArrayOutputStream mergedPdfOutputStream = new ByteArrayOutputStream();
+        Document document = new Document();
+        PdfCopy copy = new PdfCopy(document, mergedPdfOutputStream);
+        document.open();
+        for ($File file:files) {
+            addPdfPages(this.getFileContent(file.getId()), copy);
+        }
+        document.close();
+
+        return uploadFile(new ByteArrayInputStream(mergedPdfOutputStream.toByteArray()));
+    }
+
+    private void addPdfPages(InputStream originalInputStream, PdfCopy copy) throws IOException, BadPdfFormatException {
+        PdfImportedPage page;
+        PdfCopy.PageStamp stamp;
+        PdfReader reader = new PdfReader(originalInputStream);
+        int numberOfPages = reader.getNumberOfPages();
+
+        for (int pageNumber = 0; pageNumber < numberOfPages; ) {
+            page = copy.getImportedPage(reader, ++pageNumber);
+            stamp = copy.createPageStamp(page);
+            stamp.alterContents();
+            copy.addPage(page);
+        }
+        reader.close();
     }
 }
