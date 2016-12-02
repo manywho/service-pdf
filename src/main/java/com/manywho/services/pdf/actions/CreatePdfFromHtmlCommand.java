@@ -24,8 +24,9 @@ public class CreatePdfFromHtmlCommand implements ActionCommand<ServiceConfigurat
     public ActionResponse<CreatePdfFromHtml.Output> execute(ServiceConfiguration serviceConfiguration, ServiceRequest serviceRequest, CreatePdfFromHtml.Input input) {
         try {
             InputStream inputPdf = pdfGeneratorService.generatePdfFromHtml(input.getHtmlContent());
+            CreatePdfFromHtml.Output output = new CreatePdfFromHtml.Output(this.fileManager.uploadFile(inputPdf));
 
-            return new ActionResponse<>(new CreatePdfFromHtml.Output(this.fileManager.uploadFile(inputPdf)));
+            return new ActionResponse<>(output);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

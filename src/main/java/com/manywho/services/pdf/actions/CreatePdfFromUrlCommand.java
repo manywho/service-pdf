@@ -10,19 +10,22 @@ import com.manywho.services.pdf.services.PdfGeneratorService;
 
 import javax.inject.Inject;
 import java.io.InputStream;
+import java.net.URL;
 
-public class GetPdfCommand implements ActionCommand<ServiceConfiguration, GetPdf, GetPdf.Input, GetPdf.Output> {
+public class CreatePdfFromUrlCommand implements ActionCommand<ServiceConfiguration, CreatePdfFromUrl, CreatePdfFromUrl.Input, CreatePdfFromUrl.Output> {
     private FileManager fileManager;
 
     @Inject
-    public GetPdfCommand(FileManager fileManager) {
+    public CreatePdfFromUrlCommand(FileManager fileManager) {
         this.fileManager = fileManager;
     }
 
     @Override
-    public ActionResponse<GetPdf.Output> execute(ServiceConfiguration serviceConfiguration, ServiceRequest serviceRequest, GetPdf.Input input) {
+    public ActionResponse<CreatePdfFromUrl.Output> execute(ServiceConfiguration serviceConfiguration, ServiceRequest serviceRequest, CreatePdfFromUrl.Input input) {
         try {
-            GetPdf.Output output = new GetPdf.Output(this.fileManager.getFile(input.getFileId()));
+            InputStream inputStream = new URL(input.getPdfUrl()).openStream();
+            $File file = this.fileManager.uploadFile(inputStream);
+            CreatePdfFromUrl.Output output = new CreatePdfFromUrl.Output(file);
 
             return new ActionResponse<>(output);
         } catch (Exception e) {

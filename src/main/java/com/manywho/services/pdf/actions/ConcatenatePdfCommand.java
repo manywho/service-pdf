@@ -19,7 +19,9 @@ public class ConcatenatePdfCommand implements ActionCommand<ServiceConfiguration
     @Override
     public ActionResponse<ConcatenatePdf.Output> execute(ServiceConfiguration serviceConfiguration, ServiceRequest serviceRequest, ConcatenatePdf.Input input) {
         try {
-            return new ActionResponse<>(new ConcatenatePdf.Output(this.fileManager.concatenatePdf(input.getFiles())));
+            ConcatenatePdf.Output output = new ConcatenatePdf.Output(this.fileManager.concatenatePdf(input.getFiles()));
+
+            return new ActionResponse<>(output);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
