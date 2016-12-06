@@ -17,7 +17,7 @@ public class GetPdf {
     }
 
     public static class Output {
-        @Action.Output(name = "PDF File", contentType = ContentType.String)
+        @Action.Output(name = "PDF File", contentType = ContentType.Object)
         private $File file;
 
         public Output($File file) {
