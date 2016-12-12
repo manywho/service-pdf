@@ -16,6 +16,9 @@ import com.lowagie.text.pdf.PdfReader;
 import com.manywho.sdk.services.types.system.$File;
 import com.manywho.services.pdf.configuration.S3Configuration;
 import com.manywho.services.pdf.providers.ConfigurationPdfProvider;
+import com.manywho.services.pdf.services.PdfGeneratorService;
+import com.manywho.services.pdf.types.FormField;
+
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,14 +31,16 @@ import java.util.UUID;
 public class FileManager {
     private S3Configuration s3Config;
     private AmazonS3 s3client;
+    private PdfGeneratorService pdfGeneratorService;
 
     final static private Integer MAX_TIME_LINK_AVAILABLE = 300000;
 
     @Inject
-    public FileManager(ConfigurationPdfProvider configurationPdfProvider) {
+    public FileManager(ConfigurationPdfProvider configurationPdfProvider, PdfGeneratorService pdfGeneratorService) {
         this.s3Config = configurationPdfProvider.configurationProvider().bind("s3", S3Configuration.class);
         BasicAWSCredentials credentials = new BasicAWSCredentials(this.s3Config.awsAccessKeyId(), this.s3Config.awsSecretAccessKey());
         this.s3client = new AmazonS3Client(credentials);
+        this.pdfGeneratorService = pdfGeneratorService;
     }
 
     public $File uploadFile(InputStream inputStream) throws Exception {
@@ -88,5 +93,22 @@ public class FileManager {
             copy.addPage(page);
         }
         reader.close();
+    }
+
+    public $File getFilePopulated(String fileId, List<FormField> fieldList) {
+        InputStream inputStream;
+
+        try {
+            if(fieldList.isEmpty()) {
+                inputStream = this.getFileContent(fileId);
+            }else {
+                inputStream = pdfGeneratorService.populatePdfFromFields(
+                        this.getFileContent(fileId), fieldList);
+            }
+
+            return this.uploadFile(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

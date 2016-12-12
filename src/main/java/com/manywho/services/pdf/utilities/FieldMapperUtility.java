@@ -3,6 +3,7 @@ package com.manywho.services.pdf.utilities;
 import com.google.common.base.Strings;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.AcroFields;
+import com.manywho.sdk.api.ContentType;
 import com.manywho.services.pdf.types.FormField;
 
 import java.io.IOException;
@@ -39,6 +40,30 @@ public class FieldMapperUtility {
             case AcroFields.FIELD_TYPE_SIGNATURE:
             default:
                 break;
+        }
+    }
+
+
+    public static ContentType getContentTypeForFieldType(int fieldType) {
+        switch (fieldType) {
+            case AcroFields.FIELD_TYPE_NONE:
+                return ContentType.String;
+            case AcroFields.FIELD_TYPE_PUSHBUTTON:
+                return null;
+            case AcroFields.FIELD_TYPE_CHECKBOX:
+                return ContentType.Boolean;
+            case AcroFields.FIELD_TYPE_RADIOBUTTON:
+                return ContentType.Boolean;
+            case AcroFields.FIELD_TYPE_TEXT:
+                return ContentType.String;
+            case AcroFields.FIELD_TYPE_LIST:
+                return ContentType.String;
+            case AcroFields.FIELD_TYPE_COMBO:
+                return ContentType.String;
+            case AcroFields.FIELD_TYPE_SIGNATURE:
+                return null;
+            default:
+                return ContentType.String;
         }
     }
 
