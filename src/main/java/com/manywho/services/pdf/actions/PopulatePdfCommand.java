@@ -19,7 +19,7 @@ public class PopulatePdfCommand implements ActionCommand<ServiceConfiguration, P
     @Override
     public ActionResponse<PopulatePdf.Output> execute(ServiceConfiguration serviceConfiguration, ServiceRequest serviceRequest, PopulatePdf.Input input) {
         try {
-            $File file = fileManager.getFilePopulated(input.getPdfFile().getId(), input.getPdfFields() );
+            $File file = fileManager.getS3FilePopulated(input.getPdfFile().getId(), input.getPdfFields() );
 
             return new ActionResponse<>(new PopulatePdf.Output(file));
         } catch (Exception e) {

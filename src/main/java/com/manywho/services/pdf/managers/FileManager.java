@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -95,7 +96,7 @@ public class FileManager {
         reader.close();
     }
 
-    public $File getFilePopulated(String fileId, List<FormField> fieldList) {
+    public $File getS3FilePopulated(String fileId, List<FormField> fieldList) {
         InputStream inputStream;
 
         try {
@@ -104,6 +105,21 @@ public class FileManager {
             }else {
                 inputStream = pdfGeneratorService.populatePdfFromFields(
                         this.getFileContent(fileId), fieldList);
+            }
+
+            return this.uploadFile(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public $File getFilePopulated(String url, List<FormField> fieldList) {
+        InputStream inputStream;
+        try {
+            if(fieldList.isEmpty()) {
+                inputStream = new URL(url).openStream();
+            }else {
+                inputStream = pdfGeneratorService.populatePdfFromFields(new URL(url).openStream(), fieldList);
             }
 
             return this.uploadFile(inputStream);

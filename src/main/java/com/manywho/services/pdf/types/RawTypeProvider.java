@@ -34,11 +34,8 @@ public class RawTypeProvider implements TypeProvider {
             if (describeServiceRequest.getConfigurationValues() != null && describeServiceRequest.getConfigurationValues().size()>0) {
                 ServiceConfiguration serviceConfiguration = configurationParser.from(describeServiceRequest);
                 if (serviceConfiguration.getPdfFormUrl() != null) {
-                    if (Strings.isNullOrEmpty(serviceConfiguration.getPdfTypeName())) {
-                        throw new RuntimeException("The PDF Type Name can not be empty if PDF Form URL is populated");
-                    }
 
-                    return describeTypeService.getListTypeElement(serviceConfiguration.getPdfFormUrl(), serviceConfiguration.getPdfTypeName());
+                    return describeTypeService.getListTypeElement(serviceConfiguration.getPdfFormUrl());
                 }
             }
         } catch (Exception e) {

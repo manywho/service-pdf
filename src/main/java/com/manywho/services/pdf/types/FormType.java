@@ -21,4 +21,9 @@ public class FormType implements Type{
     public String getPdfFormUrl() {
         return pdfFormUrl;
     }
+
+    public FormType(String typeName, String pdfFormUrl) {
+        this.typeName = typeName;
+        this.pdfFormUrl = pdfFormUrl;
+    }
 }
