@@ -34,7 +34,7 @@ public class FileManager {
     private AmazonS3 s3client;
     private PdfGeneratorService pdfGeneratorService;
 
-    final static private Integer MAX_TIME_LINK_AVAILABLE = 300000;
+    final static private Integer MAX_TIME_LINK_AVAILABLE = 7200000;
 
     @Inject
     public FileManager(ConfigurationPdfProvider configurationPdfProvider, PdfGeneratorService pdfGeneratorService) {
