@@ -1,8 +1,8 @@
 package com.manywho.services.pdf.types;
 
-import com.google.common.base.Strings;
-import com.manywho.sdk.api.describe.DescribeServiceRequest;
+import com.manywho.sdk.api.describe.DescribeInstallRequest;
 import com.manywho.sdk.api.draw.elements.type.TypeElement;
+import com.manywho.sdk.services.configuration.Configuration;
 import com.manywho.sdk.services.configuration.ConfigurationParser;
 import com.manywho.sdk.services.types.TypeProvider;
 import com.manywho.services.pdf.ServiceConfiguration;
@@ -23,16 +23,15 @@ public class RawTypeProvider implements TypeProvider {
     }
 
     @Override
-    public boolean doesTypeExist(String s) {
+    public boolean doesTypeExist(Configuration configuration, String s) {
         return true;
     }
 
     @Override
-    public List<TypeElement> describeTypes(DescribeServiceRequest describeServiceRequest) {
-
+    public List<TypeElement> describeTypes(Configuration configuration, DescribeInstallRequest describeInstallRequest) {
         try {
-            if (describeServiceRequest.getConfigurationValues() != null && describeServiceRequest.getConfigurationValues().size()>0) {
-                ServiceConfiguration serviceConfiguration = configurationParser.from(describeServiceRequest);
+            if (describeInstallRequest.getConfigurationValues() != null && describeInstallRequest.getConfigurationValues().size()>0) {
+                ServiceConfiguration serviceConfiguration = configurationParser.from(describeInstallRequest);
                 if (serviceConfiguration.getPdfFormUrl() != null) {
 
                     return describeTypeService.getListTypeElement(serviceConfiguration.getPdfFormUrl());
