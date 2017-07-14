@@ -1,6 +1,7 @@
 package com.manywho.services.pdf.types;
 
-import com.manywho.sdk.api.describe.DescribeInstallRequest;
+import com.google.common.base.Strings;
+import com.manywho.sdk.api.describe.DescribeServiceRequest;
 import com.manywho.sdk.api.draw.elements.type.TypeElement;
 import com.manywho.sdk.services.configuration.Configuration;
 import com.manywho.sdk.services.configuration.ConfigurationParser;
@@ -28,11 +29,15 @@ public class RawTypeProvider implements TypeProvider {
     }
 
     @Override
-    public List<TypeElement> describeTypes(Configuration configuration, DescribeInstallRequest describeInstallRequest) {
+    public List<TypeElement> describeTypes(Configuration configuration, DescribeServiceRequest describeServiceRequest) {
+
         try {
-            if (describeInstallRequest.getConfigurationValues() != null && describeInstallRequest.getConfigurationValues().size()>0) {
-                ServiceConfiguration serviceConfiguration = configurationParser.from(describeInstallRequest);
+            if (describeServiceRequest.getConfigurationValues() != null && describeServiceRequest.getConfigurationValues().size()>0) {
+                ServiceConfiguration serviceConfiguration = configurationParser.from(describeServiceRequest);
                 if (serviceConfiguration.getPdfFormUrl() != null) {
+                    if (Strings.isNullOrEmpty(serviceConfiguration.getPdfFormUrl())) {
+                        throw new RuntimeException("The PDF Type Name can not be empty if PDF Form URL is populated");
+                    }
 
                     return describeTypeService.getListTypeElement(serviceConfiguration.getPdfFormUrl());
                 }
