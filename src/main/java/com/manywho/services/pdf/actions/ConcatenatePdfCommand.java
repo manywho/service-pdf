@@ -24,7 +24,12 @@ public class ConcatenatePdfCommand implements ActionCommand<ServiceConfiguration
             return new ActionResponse<>(output);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+
+            if ("PdfReader not opened with owner password".equals(e.getMessage())) {
+                throw new RuntimeException("Concatenate PDF with owner password restrictions is not supported.", e);
+            }
+
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }
