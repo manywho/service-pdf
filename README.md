@@ -3,6 +3,13 @@ Pdf Service
 
 This service allows you to generate and manipulate PDFs.
 
+
+## Running
+
+The service is compatible with Heroku, and can be deployed by clicking the button below:
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/manywho/service-pdf)
+
 ## Running
 
 ### Configuration
