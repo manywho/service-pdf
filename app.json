@@ -1,0 +1,23 @@
+{
+  "name": "Boomi Flow PDF Service",
+  "description": "A plugin that allows your Boomi Flows to add PDF functionality",
+  "repository": "https://github.com/manywho/service-pdf",
+  "logo": "https://s3.amazonaws.com/manywho-service-assets/icons/service-pdf.png",
+  "keywords": ["manywho", "boomi", "pdf"],
+
+  "env": {
+    "s3.bucketName": {
+      "description": "AWS S3 Bucket Name",
+      "required": true
+    },
+    "s3.awsAccessKeyId": {
+      "description": "AWS S3 Access Key Id",
+      "required": true
+    },
+    "s3.awsSecretAccessKey": {
+      "description": "AWS S3 Secret Access Key",
+      "required": true
+    }
+  }
+}
+

@@ -19,6 +19,6 @@ public class Application extends Servlet3Server  {
 
         server.addModule(new ApplicationPdfModule());
         server.setApplication(Application.class);
-        server.start("/api/pdf/1", 8080);
+        server.start("/api/pdf/1");
     }
 }
