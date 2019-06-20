@@ -8,7 +8,9 @@ import com.manywho.sdk.api.ContentType;
 import com.manywho.sdk.api.run.elements.type.Property;
 import com.manywho.services.pdf.types.FormField;
 import com.manywho.services.pdf.utilities.FieldMapperUtility;
-import org.xhtmlrenderer.pdf.ITextRenderer;
+import io.woo.htmltopdf.HtmlToPdf;
+import io.woo.htmltopdf.HtmlToPdfException;
+import io.woo.htmltopdf.HtmlToPdfObject;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -16,21 +18,16 @@ import java.util.*;
 public class PdfGeneratorService {
 
     public InputStream generatePdfFromHtml(String html) {
-        ITextRenderer iTextRenderer = new ITextRenderer();
-        iTextRenderer.setDocumentFromString(html);
+        HtmlToPdf htmlToPdf = HtmlToPdf.create()
+                .object(HtmlToPdfObject.forHtml(html));
 
-        iTextRenderer.layout();
-        PipedInputStream in = new PipedInputStream();
-        try {
-            final PipedOutputStream out = new PipedOutputStream(in);
-            iTextRenderer.createPDF(out);
-            out.close();
-
-        } catch (DocumentException | IOException e) {
+        try (InputStream in = htmlToPdf.convert()) {
+            return in;
+        } catch (HtmlToPdfException  | IOException e) {
             e.printStackTrace();
-        }
+            throw new RuntimeException("Error converting HTML to PDF", e);
 
-        return in;
+        }
     }
 
     public ByteArrayInputStream populatePdfFromFields(InputStream originalPdf, List<FormField> fields) throws IOException, DocumentException {
