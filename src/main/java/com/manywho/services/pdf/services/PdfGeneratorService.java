@@ -8,9 +8,8 @@ import com.manywho.sdk.api.ContentType;
 import com.manywho.sdk.api.run.elements.type.Property;
 import com.manywho.services.pdf.types.FormField;
 import com.manywho.services.pdf.utilities.FieldMapperUtility;
-import io.woo.htmltopdf.HtmlToPdf;
-import io.woo.htmltopdf.HtmlToPdfException;
-import io.woo.htmltopdf.HtmlToPdfObject;
+import org.w3c.tidy.Tidy;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -18,16 +17,31 @@ import java.util.*;
 public class PdfGeneratorService {
 
     public InputStream generatePdfFromHtml(String html) {
-        HtmlToPdf htmlToPdf = HtmlToPdf.create()
-                .object(HtmlToPdfObject.forHtml(html));
+        ITextRenderer iTextRenderer = new ITextRenderer();
+        iTextRenderer.setDocumentFromString(cleanHtml(html));
+        iTextRenderer.layout();
 
-        try (InputStream in = htmlToPdf.convert()) {
-            return in;
-        } catch (HtmlToPdfException  | IOException e) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            iTextRenderer.createPDF(outputStream);
+            outputStream.close();
+
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error converting HTML to PDF", e);
 
+            throw new RuntimeException("Error parsing HTML to PDF", e);
         }
+    }
+
+    private String cleanHtml(String dirtyHtml) {
+        Tidy tidy = new Tidy();
+        tidy.setXHTML(true);
+        InputStream dirtyStream = new ByteArrayInputStream(dirtyHtml.getBytes());
+        ByteArrayOutputStream xhtmlStream = new ByteArrayOutputStream();
+        tidy.parse(dirtyStream, xhtmlStream);
+
+        return xhtmlStream.toString();
     }
 
     public ByteArrayInputStream populatePdfFromFields(InputStream originalPdf, List<FormField> fields) throws IOException, DocumentException {

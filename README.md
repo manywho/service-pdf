@@ -3,7 +3,15 @@ Pdf Service
 
 This service allows you to generate and manipulate PDFs.
 
-## Running
+#### Building
+
+To build the service, you will need to have Maven 3 and a Java 8 implementation installed.
+
+You can build the runnable shaded JAR:
+
+```bash
+$ mvn clean package -DskipTests=true
+```
 
 ### Configuration
 
