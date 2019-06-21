@@ -8,7 +8,7 @@ import com.manywho.sdk.services.types.system.$File;
 public class CreatePdfFromHtml {
 
     public static class Input {
-        @Action.Input(name = "HTML Content", contentType = ContentType.String, required = true)
+        @Action.Input(name = "HTML Content", contentType = ContentType.Content, required = true)
         private String htmlContent;
 
         public String getHtmlContent() {
