@@ -53,17 +53,17 @@
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-core</artifactId>
-            <version>${flying.saucer}</version>
+            <version>${version.flying.saucer}</version>
         </dependency>
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-pdf-openpdf</artifactId>
-            <version>${flying.saucer}</version>
+            <version>${version.flying.saucer}</version>
         </dependency>
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-swt</artifactId>
-            <version>${flying.saucer}</version>
+            <version>${version.flying.saucer}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jtidy</groupId>
