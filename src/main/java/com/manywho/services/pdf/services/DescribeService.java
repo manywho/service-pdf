@@ -21,14 +21,9 @@ public class DescribeService {
         this.pdfGeneratorService = pdfGeneratorService;
     }
 
-    public TypeElement createTypeElementFromForm(String pdfFormUrl, String typeName) {
+    public TypeElement createTypeElementFromForm(String pdfFormUrl, String typeName) throws IOException {
         HashMap<String, ContentType> formInputs;
-
-        try {
-            formInputs = pdfGeneratorService.getTypePropertiesFromPdfForm(pdfFormUrl);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        formInputs = pdfGeneratorService.getTypePropertiesFromPdfForm(pdfFormUrl);
 
         List<TypeElementProperty> properties = Lists.newArrayList();
         List<TypeElementPropertyBinding> propertyBindings = Lists.newArrayList();

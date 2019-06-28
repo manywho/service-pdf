@@ -14,23 +14,18 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+
 public class PdfGeneratorService {
 
-    public InputStream generatePdfFromHtml(String html) {
+    public InputStream generatePdfFromHtml(String html) throws IOException {
         ITextRenderer iTextRenderer = new ITextRenderer();
         iTextRenderer.setDocumentFromString(cleanHtml(html));
         iTextRenderer.layout();
 
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             iTextRenderer.createPDF(outputStream);
-            outputStream.close();
 
             return new ByteArrayInputStream(outputStream.toByteArray());
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();
-
-            throw new RuntimeException("Error parsing HTML to PDF", e);
         }
     }
 

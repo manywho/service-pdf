@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class FileManager {
         this.pdfGeneratorService = pdfGeneratorService;
     }
 
-    public $File uploadFile(InputStream inputStream) throws Exception {
+    public $File uploadFile(InputStream inputStream) {
         String id = UUID.randomUUID().toString();
         String fileName = String.format("%s.pdf", id);
         ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -96,35 +97,28 @@ public class FileManager {
         reader.close();
     }
 
-    public $File getS3FilePopulated(String fileId, List<FormField> fieldList) {
+    public $File getS3FilePopulated(String fileId, List<FormField> fieldList) throws IOException {
         InputStream inputStream;
 
-        try {
-            if(fieldList.isEmpty()) {
-                inputStream = this.getFileContent(fileId);
-            }else {
-                inputStream = pdfGeneratorService.populatePdfFromFields(
-                        this.getFileContent(fileId), fieldList);
-            }
-
-            return this.uploadFile(inputStream);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if(fieldList.isEmpty()) {
+            inputStream = this.getFileContent(fileId);
+        } else {
+            inputStream = pdfGeneratorService.populatePdfFromFields(this.getFileContent(fileId), fieldList);
         }
+
+        return this.uploadFile(inputStream);
+
     }
 
-    public $File getFilePopulated(String url, List<FormField> fieldList) {
+    public $File getFilePopulated(String url, List<FormField> fieldList) throws IOException {
         InputStream inputStream;
-        try {
-            if(fieldList.isEmpty()) {
-                inputStream = new URL(url).openStream();
-            }else {
-                inputStream = pdfGeneratorService.populatePdfFromFields(new URL(url).openStream(), fieldList);
-            }
 
-            return this.uploadFile(inputStream);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if(fieldList.isEmpty()) {
+            inputStream = new URL(url).openStream();
+        }else {
+            inputStream = pdfGeneratorService.populatePdfFromFields(new URL(url).openStream(), fieldList);
         }
+
+        return this.uploadFile(inputStream);
     }
 }
