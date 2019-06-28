@@ -28,7 +28,7 @@ public class ConcatenatePdfCommand implements ActionCommand<ServiceConfiguration
             e.printStackTrace();
 
             if ("PdfReader not opened with owner password".equals(e.getMessage())) {
-                throw new RuntimeException("Concatenating PDF with owner password restrictions is not supported.", e);
+                throw new RuntimeException("Concatenating a PDF with owner password restrictions is not supported.", e);
             }
 
             LOGGER.error("There was a problem concatenating the PDF from the provided files: {}", e.getMessage(), e);
