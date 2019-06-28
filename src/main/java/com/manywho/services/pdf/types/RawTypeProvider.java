@@ -7,12 +7,17 @@ import com.manywho.sdk.services.configuration.Configuration;
 import com.manywho.sdk.services.configuration.ConfigurationParser;
 import com.manywho.sdk.services.types.TypeProvider;
 import com.manywho.services.pdf.ServiceConfiguration;
+import com.manywho.services.pdf.actions.GetPdfCommand;
 import com.manywho.services.pdf.managers.DescribeManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RawTypeProvider implements TypeProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RawTypeProvider.class);
 
     private DescribeManager describeTypeService;
     private ConfigurationParser configurationParser;
@@ -43,7 +48,10 @@ public class RawTypeProvider implements TypeProvider {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            String error = String.format("There was a problem reading the PDF Form fields: %s", e.getMessage());
+            LOGGER.error(error, e);
+
+            throw new RuntimeException(error, e);
         }
 
         return new ArrayList<>();

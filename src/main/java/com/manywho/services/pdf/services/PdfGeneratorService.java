@@ -8,29 +8,35 @@ import com.manywho.sdk.api.ContentType;
 import com.manywho.sdk.api.run.elements.type.Property;
 import com.manywho.services.pdf.types.FormField;
 import com.manywho.services.pdf.utilities.FieldMapperUtility;
+import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+
 public class PdfGeneratorService {
 
-    public InputStream generatePdfFromHtml(String html) {
+    public InputStream generatePdfFromHtml(String html) throws IOException {
         ITextRenderer iTextRenderer = new ITextRenderer();
-        iTextRenderer.setDocumentFromString(html);
-
+        iTextRenderer.setDocumentFromString(cleanHtml(html));
         iTextRenderer.layout();
-        PipedInputStream in = new PipedInputStream();
-        try {
-            final PipedOutputStream out = new PipedOutputStream(in);
-            iTextRenderer.createPDF(out);
-            out.close();
 
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            iTextRenderer.createPDF(outputStream);
+
+            return new ByteArrayInputStream(outputStream.toByteArray());
         }
+    }
 
-        return in;
+    private String cleanHtml(String dirtyHtml) {
+        Tidy tidy = new Tidy();
+        tidy.setXHTML(true);
+        InputStream dirtyStream = new ByteArrayInputStream(dirtyHtml.getBytes());
+        ByteArrayOutputStream xhtmlStream = new ByteArrayOutputStream();
+        tidy.parse(dirtyStream, xhtmlStream);
+
+        return xhtmlStream.toString();
     }
 
     public ByteArrayInputStream populatePdfFromFields(InputStream originalPdf, List<FormField> fields) throws IOException, DocumentException {

@@ -10,6 +10,7 @@ import com.manywho.services.pdf.services.PdfGeneratorService;
 import com.manywho.services.pdf.types.FormField;
 import com.manywho.services.pdf.types.properties.DynamicTypePropertyName;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.*;
 
 public class DataManager {
@@ -23,7 +24,7 @@ public class DataManager {
         this.fileManager = fileManager;
     }
 
-    public MObject createPdf(ServiceConfiguration serviceConfiguration, MObject mObject) {
+    public MObject createPdf(ServiceConfiguration serviceConfiguration, MObject mObject) throws IOException {
         Optional<Property> originalFileUrl = mObject.getProperties().stream()
                 .filter(p -> Objects.equals(p.getDeveloperName(), DynamicTypePropertyName.PDF_ORIGINAL_FILE_URL))
                 .findFirst();

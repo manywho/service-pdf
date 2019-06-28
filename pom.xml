@@ -7,6 +7,9 @@
     <groupId>com.manywho.services</groupId>
     <artifactId>pdf</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <version.flying.saucer>9.1.18</version.flying.saucer>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -46,13 +49,29 @@
             <artifactId>cfg4j-core</artifactId>
             <version>4.4.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
-            <artifactId>flying-saucer-pdf</artifactId>
-            <version>9.1.0</version>
+            <artifactId>flying-saucer-core</artifactId>
+            <version>${flying.saucer}</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf-openpdf</artifactId>
+            <version>${flying.saucer}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-swt</artifactId>
+            <version>${flying.saucer}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jtidy</groupId>
+            <artifactId>jtidy</artifactId>
+            <version>r938</version>
+        </dependency>
 
+    </dependencies>
     <build>
         <resources>
             <resource>
