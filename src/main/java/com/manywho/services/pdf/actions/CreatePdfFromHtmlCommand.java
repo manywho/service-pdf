@@ -8,7 +8,6 @@ import com.manywho.services.pdf.managers.FileManager;
 import com.manywho.services.pdf.services.PdfGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
 import java.io.InputStream;
 
@@ -32,10 +31,9 @@ public class CreatePdfFromHtmlCommand implements ActionCommand<ServiceConfigurat
 
             return new ActionResponse<>(output);
         } catch (Exception e) {
-            String error = String.format("There was a problem generating a PDF from the provided HTML content: %s", e.getMessage());
-            LOGGER.error(error, e);
+            LOGGER.error("There was a problem generating a PDF from the provided HTML content: {}", e.getMessage(), e);
 
-            throw new RuntimeException(error, e);
+            throw new RuntimeException(String.format("There was a problem generating a PDF from the provided HTML content: %s", e.getMessage()));
         }
     }
 }

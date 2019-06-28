@@ -8,7 +8,6 @@ import com.manywho.services.pdf.ServiceConfiguration;
 import com.manywho.services.pdf.managers.FileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
 import java.io.InputStream;
 import java.net.URL;
@@ -31,10 +30,9 @@ public class CreatePdfFromUrlCommand implements ActionCommand<ServiceConfigurati
 
             return new ActionResponse<>(output);
         } catch (Exception e) {
-            String error = String.format("There was a problem generating a PDF from the provided URL: %s", e.getMessage());
-            LOGGER.error(error, e);
+            LOGGER.error("There was a problem generating a PDF from the provided URL: {}", e.getMessage(), e);
 
-            throw new RuntimeException(error, e);
+            throw new RuntimeException(String.format("There was a problem generating a PDF from the provided URL: %s", e.getMessage()));
         }
     }
 }

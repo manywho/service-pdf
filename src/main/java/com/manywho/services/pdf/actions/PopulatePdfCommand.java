@@ -8,7 +8,6 @@ import com.manywho.services.pdf.ServiceConfiguration;
 import com.manywho.services.pdf.managers.FileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
 
 public class PopulatePdfCommand implements ActionCommand<ServiceConfiguration, PopulatePdf, PopulatePdf.Input, PopulatePdf.Output> {
@@ -27,12 +26,9 @@ public class PopulatePdfCommand implements ActionCommand<ServiceConfiguration, P
 
             return new ActionResponse<>(new PopulatePdf.Output(file));
         } catch (Exception e) {
-            String error = String.format("There was a problem populating the PDF: %s", e.getMessage());
-            LOGGER.error(error, e);
+            LOGGER.error("There was a problem populating the PDF: {}", e.getMessage(), e);
 
-            throw new RuntimeException(error, e);
+            throw new RuntimeException(String.format("There was a problem populating the PDF: %s", e.getMessage()));
         }
     }
-
-
 }
