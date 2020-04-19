@@ -1,5 +1,6 @@
 package com.manywho.services.pdf.database;
 
+import com.manywho.sdk.api.draw.content.Command;
 import com.manywho.sdk.api.run.elements.type.ListFilter;
 import com.manywho.sdk.api.run.elements.type.MObject;
 import com.manywho.sdk.api.run.elements.type.ObjectDataType;
@@ -21,20 +22,20 @@ public class DynamicTypeDatabase implements RawDatabase<ServiceConfiguration> {
     }
 
     @Override
-    public MObject find(ServiceConfiguration serviceConfiguration, ObjectDataType objectDataType, String s) {
+    public MObject find(ServiceConfiguration configuration, ObjectDataType objectDataType, Command command, String id) {
         return null;
     }
 
     @Override
-    public List<MObject> findAll(ServiceConfiguration serviceConfiguration, ObjectDataType objectDataType, ListFilter listFilter) {
+    public List<MObject> findAll(ServiceConfiguration configuration, ObjectDataType objectDataType, Command command, ListFilter filter, List<MObject> objects) {
         return null;
     }
 
     @Override
-    public MObject create(ServiceConfiguration serviceConfiguration, MObject mObject) {
+    public MObject create(ServiceConfiguration configuration, ObjectDataType objectDataType, MObject object) {
         try {
-            if (!Objects.equals(mObject.getDeveloperName(), FormField.NAME) && !Objects.equals(mObject.getDeveloperName(), FormType.NAME)) {
-                return dataManager.createPdf(serviceConfiguration, mObject);
+            if (!Objects.equals(object.getDeveloperName(), FormField.NAME) && !Objects.equals(object.getDeveloperName(), FormType.NAME)) {
+                return dataManager.createPdf(configuration, object);
             }
         } catch (Exception e) {
             throw new RuntimeException("problem creating object" + e.getMessage());
@@ -44,27 +45,27 @@ public class DynamicTypeDatabase implements RawDatabase<ServiceConfiguration> {
     }
 
     @Override
-    public List<MObject> create(ServiceConfiguration serviceConfiguration, List<MObject> list) {
+    public List<MObject> create(ServiceConfiguration configuration, ObjectDataType objectDataType, List<MObject> objects) {
         return null;
     }
 
     @Override
-    public void delete(ServiceConfiguration serviceConfiguration, MObject mObject) {
+    public void delete(ServiceConfiguration configuration, ObjectDataType objectDataType, MObject object) {
 
     }
 
     @Override
-    public void delete(ServiceConfiguration serviceConfiguration, List<MObject> list) {
+    public void delete(ServiceConfiguration configuration, ObjectDataType objectDataType, List<MObject> objects) {
 
     }
 
     @Override
-    public MObject update(ServiceConfiguration serviceConfiguration, MObject mObject) {
+    public MObject update(ServiceConfiguration configuration, ObjectDataType objectDataType, MObject object) {
         return null;
     }
 
     @Override
-    public List<MObject> update(ServiceConfiguration serviceConfiguration, List<MObject> list) {
+    public List<MObject> update(ServiceConfiguration configuration, ObjectDataType objectDataType, List<MObject> objects) {
         return null;
     }
 }
