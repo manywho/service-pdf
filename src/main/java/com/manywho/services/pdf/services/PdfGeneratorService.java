@@ -29,9 +29,10 @@ public class PdfGeneratorService {
         }
     }
 
-    private String cleanHtml(String dirtyHtml) {
+    public String cleanHtml(String dirtyHtml) {
         Tidy tidy = new Tidy();
         tidy.setXHTML(true);
+        tidy.setInputEncoding("UTF8");
         InputStream dirtyStream = new ByteArrayInputStream(dirtyHtml.getBytes());
         ByteArrayOutputStream xhtmlStream = new ByteArrayOutputStream();
         tidy.parse(dirtyStream, xhtmlStream);
