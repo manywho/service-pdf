@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <version.flying.saucer>9.1.18</version.flying.saucer>
+        <version.flying.saucer>9.1.22</version.flying.saucer>
         <version.manywho.sdk>2.0.0</version.manywho.sdk>
     </properties>
 
